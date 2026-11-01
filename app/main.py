@@ -11,6 +11,8 @@ from fastapi import (
     HTTPException,
     Response
 )
+from fastapi.responses import HTMLResponse
+from fastapi.openapi.utils import get_openapi
 
 from app.config import settings
 from app.ingest_service import (
@@ -48,6 +50,57 @@ app = FastAPI(
 )
 
 
+def custom_openapi():
+    """Make Swagger UI render the files field as a native file picker.
+
+    The endpoint itself still accepts list[UploadFile]. Swagger UI versions
+    that do not render arrays of binary files correctly show a text box
+    instead, so the docs schema exposes one binary file input. The API and
+    the existing /upload page can still submit multiple files.
+    """
+    if app.openapi_schema:
+        return app.openapi_schema
+
+    schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+
+    request_body = (
+        schema.get("paths", {})
+        .get("/ingest", {})
+        .get("post", {})
+        .get("requestBody", {})
+        .get("content", {})
+        .get("multipart/form-data", {})
+        .get("schema", {})
+    )
+    body_ref = request_body.get("$ref", "")
+    body_schema_name = body_ref.rsplit("/", 1)[-1] if body_ref else None
+    body_schema = schema.get("components", {}).get("schemas", {}).get(body_schema_name, {})
+    properties = body_schema.get("properties", {})
+
+    if "files" in properties:
+        properties["files"] = {
+            "type": "string",
+            "format": "binary",
+            "title": "Files",
+            "description": (
+                "Choose a text file (.md, .txt, .html). Swagger UI accepts one file "
+                "per request; the API also supports multiple files when repeated "
+                "files fields are submitted. Maximum 1 MB per file."
+            ),
+        }
+
+    app.openapi_schema = schema
+    return app.openapi_schema
+
+
+app.openapi = custom_openapi
+
+
 @app.get("/health")
 def health():
     ids = get_vectorstore().get(include=[])["ids"]
@@ -73,6 +126,40 @@ def remove_document(source: str):
         raise HTTPException(status_code=404, detail=f"No indexed document named '{name}'.")
     return {"deleted": name, "chunks_removed": removed}
 
+
+UPLOAD_PAGE = """<!doctype html>
+<html><head><meta charset="utf-8"><title>Upload documents</title>
+<style>body{font-family:sans-serif;max-width:720px;margin:2rem auto;padding:0 1rem}
+pre{background:#f4f4f4;padding:1rem;overflow:auto}</style></head>
+<body>
+<h2>Add documents to the index</h2>
+<p>Accepted: .md, .txt, .html (max 1 MB each). Uploading a name that already exists replaces it.</p>
+<form id="f">
+  <p><input type="file" name="files" multiple accept=".md,.txt,.html,.htm"></p>
+  <p><textarea name="urls" rows="3" cols="70" placeholder="Optional: http(s) URLs, one per line"></textarea></p>
+  <button type="submit">Upload</button>
+</form>
+<pre id="out"></pre>
+<script>
+document.getElementById('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const out = document.getElementById('out');
+  out.textContent = 'Uploading...';
+  try {
+    const r = await fetch('/ingest', {method: 'POST', body: new FormData(e.target)});
+    const data = await r.json();
+    out.textContent = 'HTTP ' + r.status + '\\n' + JSON.stringify(data, null, 2);
+  } catch (err) {
+    out.textContent = 'Request failed: ' + err;
+  }
+});
+</script>
+</body></html>"""
+
+
+@app.get("/upload", response_class=HTMLResponse, include_in_schema=False)
+def upload_page():
+    return UPLOAD_PAGE
 
 
 @app.post("/ingest", response_model=IngestResponse)
