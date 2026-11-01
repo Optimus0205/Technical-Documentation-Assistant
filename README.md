@@ -69,7 +69,7 @@ LLM output is unreliable, so every node has a defined behaviour when a call fail
 Requires Python 3.10 or newer.
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Optimus0205/Technical-Documentation-Assistant.git
 cd technical-documentation-assistant
 
 python -m venv .venv
