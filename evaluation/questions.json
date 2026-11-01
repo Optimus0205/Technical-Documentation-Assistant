@@ -1,0 +1,19 @@
+[
+  {"id": "q01", "question": "How do I declare a path parameter?", "expect": "answer", "sources": ["path-params.md"], "must_include_any": ["item_id"], "dev": true},
+  {"id": "q02", "question": "How do I restrict a path parameter to predefined values?", "expect": "answer", "sources": ["path-params.md"], "must_include_any": ["Enum"]},
+  {"id": "q03", "question": "How do I make a query parameter optional?", "expect": "answer", "sources": ["query-params.md"], "must_include_any": ["None"]},
+  {"id": "q04", "question": "how to send JSON data to my API", "expect": "answer", "sources": ["body.md"], "must_include_any": ["BaseModel"], "dev": true},
+  {"id": "q05", "question": "How do I return a 404 error from an endpoint?", "expect": "answer", "sources": ["handling-errors.md"], "must_include_any": ["HTTPException"]},
+  {"id": "q06", "question": "How do I start the development server?", "expect": "answer", "sources": ["first-steps.md"], "must_include_any": ["fastapi dev"]},
+  {"id": "q07", "question": "How do I add custom headers to an HTTP error?", "expect": "answer", "sources": ["handling-errors.md"], "must_include_any": ["headers"]},
+  {"id": "q08", "question": "How do I set default values for query parameters such as skip and limit?", "expect": "answer", "sources": ["query-params.md"], "must_include_any": ["skip", "limit"]},
+  {"id": "q09", "question": "Which decorator defines a GET endpoint?", "expect": "answer", "sources": ["first-steps.md"], "must_include_any": ["@app.get"]},
+  {"id": "q10", "question": "my API returns 422 error", "expect": "answer", "sources": ["handling-errors.md", "path-params.md"], "must_include_any": ["RequestValidationError", "validation"], "dev": true},
+  {"id": "q11", "question": "Why must /users/me be declared before /users/{user_id}?", "expect": "answer", "sources": ["path-params.md"], "must_include_any": ["order", "before"]},
+  {"id": "q12", "question": "How do I accept a path containing slashes as a path parameter?", "expect": "answer", "sources": ["path-params.md"], "must_include_any": ["file_path:path"]},
+  {"id": "q13", "question": "How do I override the default validation error handler?", "expect": "answer", "sources": ["handling-errors.md"], "must_include_any": ["RequestValidationError"]},
+  {"id": "q14", "question": "how do I deploy FastAPI with Docker", "expect": "refuse", "dev": true},
+  {"id": "q15", "question": "what is the capital of France", "expect": "refuse", "dev": true},
+  {"id": "q16", "question": "How do I add JWT authentication to FastAPI?", "expect": "refuse"},
+  {"id": "q17", "question": "How do I connect FastAPI to a PostgreSQL database?", "expect": "refuse"}
+]
