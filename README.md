@@ -48,11 +48,11 @@ The demo corpus is five pages of the FastAPI tutorial (first steps, path paramet
 
 ![Answered after upload](docs/screenshots/docker-answered.png)
 
-**Tests `and grounding-check evaluation`**
+**Tests and grounding-check evaluation**
 
 ![Tests](docs/screenshots/tests-passing.png)
 
-`![Grounding check](docs/screenshots/grounding-check.png)`
+![Grounding check](docs/screenshots/grounding-check.png)
 
 ## 1. Architecture
 
