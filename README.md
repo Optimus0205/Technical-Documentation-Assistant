@@ -24,6 +24,36 @@ The demo corpus is five pages of the FastAPI tutorial (first steps, path paramet
 | Testing | pytest, httpx (FastAPI TestClient) | 36 tests with a fake LLM and fake vector store |
 | Diagrams and tooling | Mermaid, Git and GitHub, VS Code | Architecture diagram, version control |
 
+## Screenshots
+
+**Interactive API (`/docs`)**
+
+![API overview](docs/screenshots/swagger-overview.png)
+
+**An answer with citations and grounding status**
+
+![Answer](docs/screenshots/query-answer.png)
+
+**The trace shows the self-correction: the first retrieval is rejected, the query is rewritten, `k` grows, and the right chunk is kept**
+
+![Trace](docs/screenshots/query-trace.png)
+
+**A question the documentation does not cover is refused**
+
+![Refusal](docs/screenshots/query-refusal.png)
+
+**Uploading a document in the browser (`/upload`), then asking the same question again**
+
+![Upload page](docs/screenshots/upload-page.png)
+
+![Answered after upload](docs/screenshots/docker-answered.png)
+
+**Tests `and grounding-check evaluation`**
+
+![Tests](docs/screenshots/tests-passing.png)
+
+`![Grounding check](docs/screenshots/grounding-check.png)`
+
 ## 1. Architecture
 
 ```mermaid
