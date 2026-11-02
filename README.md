@@ -8,6 +8,22 @@ The demo corpus is five pages of the FastAPI tutorial (first steps, path paramet
 
 ---
 
+## Tech stack
+
+| Layer | Technology | Used for |
+|---|---|---|
+| Language | Python 3.11 | Everything |
+| Workflow | LangGraph (`StateGraph`) | Nodes, shared state, conditional edges, the retry loop |
+| LLM framework | LangChain (core, text splitters) | Prompts, structured output, document objects, chunking |
+| LLM providers | Groq (`openai/gpt-oss-120b`), Google Gemini (`gemini-3.5-flash-lite`) | Query analysis, grading, rewriting, generation, grounding check |
+| Embeddings | sentence-transformers `all-MiniLM-L6-v2` (via `langchain-huggingface`) | Local 384-dimension embeddings, no API cost |
+| Vector store | ChromaDB (via `langchain-chroma`) | Persistent similarity search with cosine distance |
+| API | FastAPI, Uvicorn, Pydantic v2, pydantic-settings, python-multipart | Endpoints, validation, settings, file uploads |
+| Data storage | SQLite (standard library) | Query log and user feedback |
+| Ingestion | requests, BeautifulSoup4, markdownify | Fetching pages, converting HTML to Markdown, SSRF-checked URL ingestion |
+| Testing | pytest, httpx (FastAPI TestClient) | 36 tests with a fake LLM and fake vector store |
+| Diagrams and tooling | Mermaid, Git and GitHub, VS Code | Architecture diagram, version control |
+
 ## 1. Architecture
 
 ```mermaid
